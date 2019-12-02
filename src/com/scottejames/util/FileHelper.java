@@ -75,5 +75,13 @@ public class FileHelper {
         return maxLength;
     }
 
+    public static ArrayList<Integer> splitStringToInt(String s,String delim){
+        String[] items = s.split(delim);
+        ArrayList<Integer> result = new ArrayList<>();
+        for(String item: items){
+            result.add(Integer.parseInt(item));
+        }
+        return result;
+    }
 
 }
