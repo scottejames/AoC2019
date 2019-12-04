@@ -18,14 +18,14 @@ public class Grid<Value> {
     public void setPoint(Coord c, Value v){
         points.put(c,v);
 
-        if (c.x > xBound)
-            xBound = c.x;
-        if (c.y > yBound)
-            yBound = c.y;
-        if (c.x < xlBound)
-            xlBound = c.x;
-        if (c.y < ylBound)
-            ylBound = c.y;
+        if (c.getX() > xBound)
+            xBound = c.getX();
+        if (c.getY() > yBound)
+            yBound = c.getY();
+        if (c.getX() < xlBound)
+            xlBound = c.getX();
+        if (c.getY() < ylBound)
+            ylBound = c.getY();
     }
 
     public Value getPoint(Coord c){

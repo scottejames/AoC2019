@@ -26,10 +26,6 @@ public enum Compass {
     }
 
     public static boolean rangeCheck(int x, int y, int size){
-        if ((x<0) || (x>=size) || (y<0) || (y>=size)){
-            return false;
-        } else {
-            return true;
-        }
+        return (x >= 0) && (x < size) && (y >= 0) && (y < size);
     }
 }
