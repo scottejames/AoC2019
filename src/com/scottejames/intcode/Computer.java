@@ -15,7 +15,10 @@ public class Computer {
             this.program.add(each);
         }
     }
-
+    public void clearInput(){
+        inputStream.empty();
+        outputStream.empty();
+    }
     public void addInput(Integer i) {
         inputStream.push(i);
     }
@@ -31,8 +34,8 @@ public class Computer {
             operation.parseInput(program,programCounter);
             int offset = operation.getInstr().offset;
             int opLocation = program.get(programCounter + offset -1);
-//            System.out.print("PC : " + programCounter + " opCode " + operation.getInstr().opCodeId + " ");
-      
+           // System.out.println("PC : " + programCounter + " opCode " + operation.getInstr().opCodeId + " ");
+
             switch (operation.getInstr()) {
                 case ADD:
 //                    System.out.println("ADD " + operation.getParamOne() + " to " + operation.getParamTwo() +  " place result in " + opLocation);
