@@ -81,6 +81,11 @@ public class Computer {
                         program.set(opLocation,0);
                     }
                     break;
+                case REBASE:
+//                    System.out.println("REBASE set to "+ operation.getParamOne());
+                    Operation.setRebase(operation.getParamOne());
+
+
                 case EQUALS:
 //                    System.out.println("EQUALS set " +opLocation + " if " + operation.getParamOne()+  " equals " + operation.getParamTwo());
                     if (operation.getParamTwo().equals(operation.getParamOne())){

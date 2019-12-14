@@ -10,6 +10,7 @@ public enum Instruction {
     JUMP_IF_FALSE(6,3),
     LESS_THAN(7,4),
     EQUALS(8,4),
+    REBASE(9,2),
     HALT(99,0),
     NULL(100,0),
     ERROR(101,0);
@@ -40,6 +41,8 @@ public enum Instruction {
                 return LESS_THAN;
             case 8:
                 return EQUALS;
+            case 9:
+                return REBASE;
             case 99:
                 return HALT;
             case 100:

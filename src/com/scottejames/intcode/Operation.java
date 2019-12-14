@@ -1,12 +1,10 @@
 package com.scottejames.intcode;
 
-import com.scottejames.util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Operation {
-
+    private static Integer rebase = 0;
     private Instruction instr;
     private Integer paramOne;
     private Integer paramTwo;
@@ -37,12 +35,16 @@ public class Operation {
         }
         if (mode == Mode.IMMEDIATE) {
             return program.get(parameter);
-        } else {
+        } else if (mode == Mode.POSITION){
             if ((program.get(parameter) < 0) || (program.get(parameter) > program.size())){
                 return 0;
             }else{
                 return program.get(program.get(parameter));
             }
+        } else if (mode == Mode.RELATIVE) {
+            return program.get(program.get(parameter));
+        } else {
+                throw new RuntimeException("Unsupported opmode");
         }
     }
 
@@ -54,5 +56,9 @@ public class Operation {
     }
     public Integer getParamTwo() {
         return paramTwo;
+    }
+
+    public static void setRebase(Integer rebase) {
+        Operation.rebase += rebase;
     }
 }
