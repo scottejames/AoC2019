@@ -3,6 +3,7 @@ package com.scottejames.intcode;
 import com.scottejames.util.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Operation {
 
@@ -14,7 +15,7 @@ public class Operation {
         instr = Instruction.NULL;
     }
 
-    public void parseInput(ArrayList<Integer> program, int programCounter) {
+    public void parseInput(List<Integer> program, int programCounter) {
 
         Integer instructionOp = program.get(programCounter);
 
@@ -30,7 +31,7 @@ public class Operation {
         paramTwo = getParameter(program, programCounter+2, mode);
     }
 
-    public int getParameter(ArrayList<Integer> program, int parameter, Mode mode) {
+    public int getParameter(List<Integer> program, int parameter, Mode mode) {
         if (parameter >= program.size()) {
             return 0;
         }

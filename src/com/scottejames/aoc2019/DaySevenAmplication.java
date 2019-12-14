@@ -2,8 +2,7 @@ package com.scottejames.aoc2019;
 
 import com.scottejames.intcode.Computer;
 import com.scottejames.util.FileHelper;
-import org.omg.PortableInterceptor.INACTIVE;
-
+import com.scottejames.intcode.Status;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,66 +16,94 @@ public class DaySevenAmplication {
         FileHelper fh = new FileHelper("2019/DaySeven.txt");
         String data = fh.getFileAsString();
         program = FileHelper.splitStringToInt(data,",");
+        partOne(program);
+        partTwo(program);
 
+    }
+    public static void partOne(List<Integer> program){
         String inputs = "";
-        List<List<Integer>> permutations =generatePerm(min,max);
+        List<List<Integer>> phaseSettings =generatePerm(0,4);
         int maxOutput = 0;
-        for(List<Integer> each: permutations){
-            int result = getResult(each.get(0),each.get(1), each.get(2),each.get(3),each.get(4));
-            if (result > maxOutput)
+
+        for(List<Integer> each: phaseSettings) {
+            List<Amplifier> ampList = new ArrayList<>();
+
+            ampList.add(new Amplifier(program, each.get(0)));
+            ampList.add(new Amplifier(program, each.get(1)));
+            ampList.add(new Amplifier(program, each.get(2)));
+            ampList.add(new Amplifier(program, each.get(3)));
+            ampList.add(new Amplifier(program, each.get(4)));
+            int result = 0;
+            for (Amplifier amp : ampList) {
+                amp.runProgram(result);
+                result = amp.getNextOutput();
+            }
+            if (result > maxOutput) {
                 maxOutput = result;
+            }
         }
-        System.out.println("MaxOutput " + maxOutput + " ip " + inputs);
-    }
-
-
-    private static int getResult(int a, int b, int c, int d, int e) {
-        System.out.print("TESTING " + a + " "+ b + " "+ c + " "+ d + " "+ e);
-        int number = 0;
-        Amplifier ampOne = new Amplifier(program,a);
-        Amplifier ampTwo = new Amplifier(program,b);
-        Amplifier ampThree = new Amplifier(program,c);
-        Amplifier ampFour = new Amplifier(program,d);
-        Amplifier ampFive = new Amplifier(program,e);
-        number = ampOne.runProgram(number);
-        number = ampTwo.runProgram(number);
-        number = ampThree.runProgram(number);
-        number = ampFour.runProgram(number);
-        number = ampFive.runProgram(number);
-        System.out.println(" = " + number);
-        return number;
+        System.out.println("Part 1: " + maxOutput);
 
     }
 
-//    private static List<Computer> createAmplifiersForPhaseSet(List<Integer> phaseSet, List<String> program) {
-//        List<Computer> amplifiers = new ArrayList<>();
-//        for (int i = 0; i < phaseSet.size(); i++) {
-//
-//            Computer computer = new Computer(program);
-//            amplifier.addInput(phaseSet.get(i));
-//            amplifiers.add(amplifier);
-//            if (i == 0) {
-//                amplifier.addInput(0);
-//            }
-//        }
-//        return amplifiers;
-//    }
+    public static void partTwo(List<Integer> program){
+        List<List<Integer>> phaseSettings =generatePerm(5,9);
+        int maxOutput = 0;
+        for(List<Integer> each: phaseSettings)
+        {
+            List<Amplifier> ampList = new ArrayList<>();
+
+            ampList.add(new Amplifier(program,each.get(0)));
+            ampList.add(new Amplifier(program,each.get(1)));
+            ampList.add(new Amplifier(program,each.get(2)));
+            ampList.add(new Amplifier(program,each.get(3)));
+            ampList.add(new Amplifier(program,each.get(4)));
+
+
+            int result = 0;
+            boolean stop = false;
+            // Probably should check for all stopped
+            while (ampList.get(4).isStopped() == false){
+                for (int i = 0; i < ampList.size(); i++) {
+                        Status s = ampList.get(i).runProgram(result);
+                        result = ampList.get(i).getNextOutput();
+//                        System.out.println("AMP[" + i + "] Result is " + result + " status is " + s.toString());
+
+                        if (s == Status.EXIT) {
+                            ampList.get(i).setStopped(true);
+                        }
+                }
+            }
+            if (result > maxOutput){
+                maxOutput = result;
+            }
+        }
+       System.out.println("Part 2 " + maxOutput);
+
+    }
+
 }
 class Amplifier extends Computer {
+    private boolean stopped = false;
 
-    private int phase = 0;
-
-    public Amplifier(ArrayList<Integer> input, int phase) {
+    public Amplifier(List<Integer> input, Integer phase) {
         super(input);
 
-        this.phase = phase;
+        addInput(phase);
+
     }
 
-    public int runProgram(int input) {
+    public Status runProgram(int input) {
         addInput(input);
-        addInput(phase);
-        super.runProgram();
-        int result = super.getNextOutput();
-        return result;
+        Status status = super.runProgram();
+        return status;
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        this.stopped = stopped;
     }
 }

@@ -1,33 +1,33 @@
 package com.scottejames.intcode;
 
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
 
 public class Computer {
-    Stack<Integer> inputStream  = new Stack<>();
-    Stack<Integer> outputStream = new Stack<>();
+    Queue<Integer> inputStream  = new LinkedList<>();
+    Queue<Integer> outputStream = new LinkedList<>();
 
-    private ArrayList<Integer> program  = new ArrayList<>();
+    private List<Integer> program  = new ArrayList<>();
     int programCounter = 0;
 
-    public  Computer(ArrayList<Integer> input){
+    public  Computer(List<Integer> input){
         for(Integer each : input) {
             this.program.add(each);
         }
     }
-    public void clearInput(){
-        inputStream.empty();
-        outputStream.empty();
-    }
+
     public void addInput(Integer i) {
-        inputStream.push(i);
+        inputStream.add(i);
     }
 
     public Integer getNextOutput(){
-        return outputStream.pop();
+        if (outputStream.isEmpty()){
+            System.err.println("Get output from empty stack!");
+            return null;
+        }
+        return outputStream.remove();
     }
 
-    public void runProgram() {
+    public Status runProgram() {
 
         Operation operation = new Operation();
         while (operation.getInstr() != Instruction.HALT){
@@ -47,15 +47,20 @@ public class Computer {
                     program.set(opLocation, operation.getParamOne() * operation.getParamTwo());
                     break;
                 case INPUT:
-                    int input = inputStream.pop();
+                    if (inputStream.isEmpty()==true) {
+                        return Status.AWAITING_INPUT;
+                    }
+                    else{
+                       int input = inputStream.remove();
 //                    System.out.println("INPUT " + input + " to " + opLocation);
+                        program.set(opLocation, input);
 
-                    program.set(opLocation, input);
+                    }
+
                     break;
                 case OUTPUT:
 //                    System.out.println("OUTPUT " + operation.getParamOne());
-
-                    outputStream.push(operation.getParamOne());
+                    outputStream.add(operation.getParamOne());
                     break;
                 case JUMP_IF_TRUE:
 //                    System.out.println("JMP if TRUE " + operation.getParamOne() + " != zero to " + operation.getParamTwo());
@@ -86,7 +91,7 @@ public class Computer {
 
                     break;
                 case HALT:
-                    return;
+                    return Status.EXIT;
 
                 default:
                     System.err.println("Found OpCode not expecting: " + operation.getInstr());
@@ -94,5 +99,7 @@ public class Computer {
             }
             programCounter += offset;
         }
+
+        return Status.UNEXPECETED;
     }
 }
