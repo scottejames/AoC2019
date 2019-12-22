@@ -83,5 +83,12 @@ public class FileHelper {
         }
         return result;
     }
-
+    public static ArrayList<Long> splitStringToLong(String s,String delim){
+        String[] items = s.split(delim);
+        ArrayList<Long> result = new ArrayList<>();
+        for(String item: items){
+            result.add(Long.parseLong(item));
+        }
+        return result;
+    }
 }

@@ -18,6 +18,13 @@ public class Util {
 
         return generatePerm(permInput);
     }
+    public  static List<List<Long>> generatePermLong(Long min, Long max){
+        List<Long> permInput = new ArrayList<>();
+        for (Long i = min; i <= max; i++)
+            permInput.add(i);
+
+        return generatePerm(permInput);
+    }
 
     public static <E> List<List<E>> generatePerm(List<E> original) {
         if (original.isEmpty()) {
