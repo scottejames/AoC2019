@@ -16,13 +16,7 @@ public class DayTwoProgramAlarm {
         ArrayList<Integer> array = FileHelper.splitStringToInt(data,",");
         Integer[] registers = array.toArray(new Integer[array.size()]);
         System.out.println(Arrays.toString(registers));
-
-//        // Fudge data
-//        registers[1] = 12;
-//        registers[2] = 2;
-//        runProgram(registers);
-//        System.out.println(Arrays.toString(registers));
-
+        
         for (int l = 0; l < 100; l++){
             for (int r = 0; r < 100; r++){
                 Integer newRegisters[] = Arrays.copyOf(registers,registers.length);
